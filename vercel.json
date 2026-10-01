@@ -1,16 +1,31 @@
 {
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/weather",
-      "destination": "/api/index.py?action=weather"
+      "src": "api/index.py",
+      "use": "@vercel/python"
     },
     {
-      "source": "/api/refresh",
-      "destination": "/api/index.py?action=refresh"
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
     },
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "src": "/static/(.*)",
+      "dest": "public/static/$1"
+    },
+    {
+      "src": "/",
+      "dest": "public/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "public/$1"
     }
   ]
 }

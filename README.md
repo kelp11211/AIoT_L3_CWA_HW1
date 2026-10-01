@@ -7,13 +7,13 @@
 
 ## 五大 Gate
 
-| Gate | 主題 | 核心成果 | PASS |
-|---|---|---|---|
-| 1 | CWA API | 取得真實 CWA JSON | API、欄位解析成功 |
-| 2 | Database | CWA → ETL → SQLite | SQL 可查到真實資料 |
-| 3 | Taiwan GIS Web | Database → Taiwan Map | 地圖位置可顯示氣象資料 |
-| 4 | GitHub | Local → GitHub | 原始碼安全推送 |
-| 5 | Vercel | GitHub → Vercel | Public Website 自動部署 |
+| Gate | 主題 | 核心成果 | PASS 狀態 |
+|---|---|---|:---:|
+| 1 | CWA API | 取得真實 CWA JSON | ✅ PASS |
+| 2 | Database | CWA → ETL → SQLite | ✅ PASS |
+| 3 | Taiwan GIS Web | Database → Taiwan Map | ✅ PASS (3A~3G) |
+| 4 | GitHub | Local → GitHub | 🔄 IN PROGRESS |
+| 5 | Vercel | GitHub → Vercel | ⏳ PENDING |
 
 ## 核心流程
 

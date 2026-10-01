@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan Weather GIS Dashboard — Gate 3G</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+
+    <!-- Custom Dashboard CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <!-- Top Navigation / Header -->
+    <header class="dashboard-header">
+        <div class="header-brand">
+            <div class="brand-logo">🌤️</div>
+            <div>
+                <h1 class="brand-title">Taiwan Weather GIS Dashboard</h1>
+                <div class="brand-subtitle">
+                    <span class="gate-badge">Gate 3G — Interactive Dashboard</span>
+                    <span class="status-pill"><span class="status-dot"></span> SQLite 連線正常 (22 縣市已同步)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button id="btn-reset-view" class="btn btn-secondary" title="重設地圖為台灣全覽視野">
+                <span>🔄</span> 重設全台視野
+            </button>
+            <div class="data-timestamp" id="data-timestamp">
+                資料來源：SQLite (weather.db)
+            </div>
+        </div>
+    </header>
+
+    <!-- Key Metrics Overview Bar -->
+    <section class="metrics-bar" id="metrics-bar">
+        <div class="metric-card" id="metric-max-temp">
+            <div class="metric-icon warm">🔥</div>
+            <div class="metric-content">
+                <div class="metric-label">全台最高溫</div>
+                <div class="metric-value" id="kpi-max-temp">--°C</div>
+                <div class="metric-sub" id="kpi-max-loc">計算中...</div>
+            </div>
+        </div>
+
+        <div class="metric-card" id="metric-min-temp">
+            <div class="metric-icon cold">❄️</div>
+            <div class="metric-content">
+                <div class="metric-label">全台最低溫</div>
+                <div class="metric-value" id="kpi-min-temp">--°C</div>
+                <div class="metric-sub" id="kpi-min-loc">計算中...</div>
+            </div>
+        </div>
+
+        <div class="metric-card" id="metric-pop">
+            <div class="metric-icon rain">💧</div>
+            <div class="metric-content">
+                <div class="metric-label">最高降雨機率</div>
+                <div class="metric-value" id="kpi-max-pop">--%</div>
+                <div class="metric-sub" id="kpi-pop-loc">計算中...</div>
+            </div>
+        </div>
+
+        <div class="metric-card" id="metric-stations">
+            <div class="metric-icon station">📡</div>
+            <div class="metric-content">
+                <div class="metric-label">測站涵蓋度</div>
+                <div class="metric-value" id="kpi-station-count">22 / 22</div>
+                <div class="metric-sub">66 筆預報 (未來 36 小時)</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Dashboard Body: Split View -->
+    <main class="dashboard-main">
+        <!-- Left Sidebar: County Weather List & Filters -->
+        <aside class="dashboard-sidebar" id="sidebar">
+            <div class="sidebar-controls">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="搜尋縣市（如：臺中、高雄）..." autocomplete="off">
+                    <button id="search-clear" class="btn-clear" style="display: none;">✕</button>
+                </div>
+
+                <div class="sort-bar">
+                    <label for="sort-select">排序依據：</label>
+                    <select id="sort-select">
+                        <option value="default">預設區域排序</option>
+                        <option value="temp-desc">氣溫（由高到低）</option>
+                        <option value="temp-asc">氣溫（由低到高）</option>
+                        <option value="pop-desc">降雨機率（由高到低）</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Scrollable County List -->
+            <div class="county-list" id="county-list">
+                <div class="loading-state">
+                    <div class="spinner"></div>
+                    <p>正在載入 SQLite 氣象資料庫...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Map Container -->
+        <div class="map-wrapper">
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+</body>
+
+</html>

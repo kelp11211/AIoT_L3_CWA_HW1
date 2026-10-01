@@ -365,13 +365,13 @@ Weather Data 必須來自 Database，不可 hard-code。
 ## Gate 3 Verification
 
 ```text
-[ ] 3A Taiwan Map = PASS
-[ ] 3B One Location Marker = PASS
-[ ] 3C Weather Popup = PASS
-[ ] 3D Taiwan Locations = PASS
-[ ] 3E Database → GIS = PASS
-[ ] 3F Taiwan GeoJSON = PASS
-[ ] 3G Interactive Dashboard = PASS
+[x] 3A Taiwan Map = PASS
+[x] 3B One Location Marker = PASS
+[x] 3C Weather Popup = PASS
+[x] 3D Taiwan Locations = PASS
+[x] 3E Database → GIS = PASS
+[x] 3F Taiwan GeoJSON = PASS
+[x] 3G Interactive Dashboard = PASS
 ```
 
 全部通過後：
@@ -692,18 +692,21 @@ Evidence:
 - 
 
 Gate 3 — Local Taiwan GIS
-Status: TODO / IN PROGRESS / PASS / FAIL
+Status: PASS
 
-3A Taiwan Map: TODO / PASS / FAIL
-3B One Location Marker: TODO / PASS / FAIL
-3C Weather Popup: TODO / PASS / FAIL
-3D Taiwan Locations: TODO / PASS / FAIL
-3E Database → GIS: TODO / PASS / FAIL
-3F Taiwan GeoJSON: TODO / PASS / FAIL
-3G Interactive Dashboard: TODO / PASS / FAIL
+3A Taiwan Map: PASS
+3B One Location Marker: PASS
+3C Weather Popup: PASS
+3D Taiwan Locations: PASS
+3E Database → GIS: PASS
+3F Taiwan GeoJSON: PASS
+3G Interactive Dashboard: PASS
 
 Evidence:
-- 
+- GATE3A_STATUS.md through GATE3G_STATUS.md all verified and PASS
+- app.py serves /api/weather connected to SQLite data/weather.db (22 locations, 66 forecasts)
+- static/data/taiwan_counties.geojson renders 22 counties boundaries with hover highlights
+- Interactive dashboard supports live search, sorting, KPI metrics, and bi-directional map sync
 
 Gate 4 — GitHub
 Status: TODO / IN PROGRESS / PASS / FAIL

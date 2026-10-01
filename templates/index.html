@@ -33,11 +33,14 @@
         </div>
 
         <div class="header-actions">
+            <button id="btn-sync-cwa" class="btn btn-primary" title="使用 requests 連線 CWA API 撈取最新即時資料">
+                <span class="sync-icon">⚡</span> <span class="sync-text">連線 CWA API 即時同步</span>
+            </button>
             <button id="btn-reset-view" class="btn btn-secondary" title="重設地圖為台灣全覽視野">
                 <span>🔄</span> 重設全台視野
             </button>
             <div class="data-timestamp" id="data-timestamp">
-                資料來源：SQLite (weather.db)
+                資料來源：CWA API (即時連線)
             </div>
         </div>
     </header>

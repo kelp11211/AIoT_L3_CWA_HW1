@@ -338,6 +338,95 @@ function initDashboard() {
     const searchClear = document.getElementById("search-clear");
     const sortSelect = document.getElementById("sort-select");
     const btnResetView = document.getElementById("btn-reset-view");
+    const btnSyncCwa = document.getElementById("btn-sync-cwa");
+
+    function showSyncToast(message, isSuccess = true) {
+        let toast = document.getElementById("sync-toast");
+        if (!toast) {
+            toast = document.createElement("div");
+            toast.id = "sync-toast";
+            toast.style.position = "fixed";
+            toast.style.bottom = "24px";
+            toast.style.right = "24px";
+            toast.style.padding = "12px 20px";
+            toast.style.borderRadius = "8px";
+            toast.style.boxShadow = "0 4px 14px rgba(0,0,0,0.2)";
+            toast.style.fontWeight = "600";
+            toast.style.fontSize = "14px";
+            toast.style.zIndex = "9999";
+            toast.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+            document.body.appendChild(toast);
+        }
+        toast.style.background = isSuccess ? "#10b981" : "#ef4444";
+        toast.style.color = "#ffffff";
+        toast.textContent = (isSuccess ? "✅ " : "⚠️ ") + message;
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0)";
+
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            toast.style.transform = "translateY(10px)";
+        }, 4000);
+    }
+
+    function loadWeatherData(isRefresh = false) {
+        const syncIcon = btnSyncCwa ? btnSyncCwa.querySelector(".sync-icon") : null;
+        const syncText = btnSyncCwa ? btnSyncCwa.querySelector(".sync-text") : null;
+        const timestampEl = document.getElementById("data-timestamp");
+
+        if (isRefresh && btnSyncCwa) {
+            btnSyncCwa.disabled = true;
+            if (syncIcon) syncIcon.classList.add("spinning");
+            if (syncText) syncText.textContent = "連線 CWA API 中...";
+        }
+
+        const endpoint = isRefresh ? "/api/refresh" : "/api/weather";
+
+        return fetch(endpoint)
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json();
+            })
+            .then((result) => {
+                globalWeatherMap = result.data || {};
+                updateKpiMetrics(globalWeatherMap);
+                initWeatherMarkers(globalWeatherMap);
+                renderCountyList();
+
+                if (timestampEl) {
+                    const timeStr = result.latest_fetched_at ? result.latest_fetched_at.replace("T", " ") : new Date().toLocaleTimeString();
+                    const srcStr = result.source === "cwa_live" ? "CWA API 即時連線" : "SQLite 快取";
+                    timestampEl.textContent = `資料來源：${srcStr} (${timeStr})`;
+                }
+
+                if (isRefresh) {
+                    showSyncToast(result.sync_message || "成功取得中央氣象署最新即時資料！", result.sync_success !== false);
+                }
+            })
+            .catch((err) => {
+                console.error("載入氣象資料失敗:", err);
+                const countyListEl = document.getElementById("county-list");
+                if (countyListEl && Object.keys(globalWeatherMap).length === 0) {
+                    countyListEl.innerHTML = `<div class="empty-state"><p style="color:red;">資料庫連線失敗，請確認後端運行狀態</p></div>`;
+                }
+                if (isRefresh) {
+                    showSyncToast("連線 CWA API 失敗，請檢查金鑰或網路連線", false);
+                }
+            })
+            .finally(() => {
+                if (isRefresh && btnSyncCwa) {
+                    btnSyncCwa.disabled = false;
+                    if (syncIcon) syncIcon.classList.remove("spinning");
+                    if (syncText) syncText.textContent = "連線 CWA API 即時同步";
+                }
+            });
+    }
+
+    if (btnSyncCwa) {
+        btnSyncCwa.addEventListener("click", () => {
+            loadWeatherData(true);
+        });
+    }
 
     if (searchInput) {
         searchInput.addEventListener("input", () => {
@@ -372,25 +461,8 @@ function initDashboard() {
         });
     }
 
-    // 1. 取得 SQLite 氣象資料
-    fetch("/api/weather")
-        .then((res) => {
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            return res.json();
-        })
-        .then((result) => {
-            globalWeatherMap = result.data || {};
-            updateKpiMetrics(globalWeatherMap);
-            initWeatherMarkers(globalWeatherMap);
-            renderCountyList();
-        })
-        .catch((err) => {
-            console.error("載入氣象資料失敗:", err);
-            const countyListEl = document.getElementById("county-list");
-            if (countyListEl) {
-                countyListEl.innerHTML = `<div class="empty-state"><p style="color:red;">資料庫連線失敗，請確認後端運行狀態</p></div>`;
-            }
-        });
+    // 1. 取得最新氣象資料
+    loadWeatherData(false);
 
     // 2. 取得台灣縣市邊界 GeoJSON
     fetch("/static/data/taiwan_counties.geojson")

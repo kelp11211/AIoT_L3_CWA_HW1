@@ -1,24 +1,35 @@
+import os
 import sqlite3
+import tempfile
 from pathlib import Path
 from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
-DB_PATH = Path("data/weather.db")
+
+
+def get_db_path() -> Path:
+    # Vercel 或 Serverless 唯讀環境下使用 /tmp 目錄
+    if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+        return Path(tempfile.gettempdir()) / "weather.db"
+    return Path("data/weather.db")
 
 
 def ensure_db():
-    if not DB_PATH.exists():
+    db_path = get_db_path()
+    if not db_path.exists():
         raw_json = Path("data/raw/F-C0032-001_20260923_110644.json")
         if raw_json.exists():
-            from gate2_etl import load_json, extract_and_transform, load_to_sqlite
-            data = load_json(raw_json)
-            rows = extract_and_transform(data)
-            load_to_sqlite(rows)
+            import gate2_etl
+            gate2_etl.DB_PATH = db_path
+            data = gate2_etl.load_json(raw_json)
+            rows = gate2_etl.extract_and_transform(data)
+            gate2_etl.load_to_sqlite(rows)
 
 
 def get_db_connection():
     ensure_db()
-    conn = sqlite3.connect(DB_PATH)
+    db_path = get_db_path()
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -31,7 +42,8 @@ def index():
 @app.route("/api/weather")
 def get_weather():
     ensure_db()
-    if not DB_PATH.exists():
+    db_path = get_db_path()
+    if not db_path.exists():
         return jsonify({"status": "error", "message": "Database not found"}), 404
 
     conn = get_db_connection()

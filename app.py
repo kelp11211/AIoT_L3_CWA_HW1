@@ -2,7 +2,7 @@ import os
 import sqlite3
 import tempfile
 from pathlib import Path
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, send_from_directory
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -41,13 +41,7 @@ def get_db_connection():
     return conn
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
-@app.route("/api/weather")
-def get_weather():
+def fetch_weather_data():
     ensure_db()
     db_path = get_db_path()
     if not db_path.exists():
@@ -71,7 +65,6 @@ def get_weather():
         """)
         rows = cursor.fetchall()
 
-        # 依縣市組織預報資料（每個縣市包含 3 個時段）
         data = {}
         for r in rows:
             loc = r["location"]
@@ -98,6 +91,27 @@ def get_weather():
         conn.close()
 
 
+@app.route("/api/weather")
+def api_weather():
+    return fetch_weather_data()
+
+
+# 涵蓋所有 Vercel 路由或前綴變異（相容直接訪問、rewrites、/api/index 等）
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
+def catch_all(path):
+    # 若請求為 API
+    if path == "api/weather" or path.endswith("/api/weather"):
+        return fetch_weather_data()
+
+    # 若請求為靜態檔案
+    if path.startswith("static/"):
+        filename = path[len("static/"):]
+        return send_from_directory(str(BASE_DIR / "static"), filename)
+
+    # 預設回傳前端儀表板 HTML
+    return render_template("index.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
-

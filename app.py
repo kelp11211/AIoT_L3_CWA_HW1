@@ -4,20 +4,27 @@ import tempfile
 from pathlib import Path
 from flask import Flask, jsonify, render_template
 
-app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parent
+
+app = Flask(
+    __name__,
+    template_folder=str(BASE_DIR / "templates"),
+    static_folder=str(BASE_DIR / "static"),
+    static_url_path="/static"
+)
 
 
 def get_db_path() -> Path:
     # Vercel 或 Serverless 唯讀環境下使用 /tmp 目錄
     if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
         return Path(tempfile.gettempdir()) / "weather.db"
-    return Path("data/weather.db")
+    return BASE_DIR / "data" / "weather.db"
 
 
 def ensure_db():
     db_path = get_db_path()
     if not db_path.exists():
-        raw_json = Path("data/raw/F-C0032-001_20260923_110644.json")
+        raw_json = BASE_DIR / "data" / "raw" / "F-C0032-001_20260923_110644.json"
         if raw_json.exists():
             import gate2_etl
             gate2_etl.DB_PATH = db_path

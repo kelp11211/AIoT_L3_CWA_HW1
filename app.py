@@ -20,12 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent
 # 載入 .env 環境變數
 load_dotenv(BASE_DIR / ".env")
 
+from flask_cors import CORS
+
 app = Flask(
     __name__,
     template_folder=str(BASE_DIR / "templates"),
     static_folder=str(BASE_DIR / "static"),
     static_url_path="/static"
 )
+CORS(app)
 
 CWA_API_URL = "https://opendata.cwa.gov.tw/api/v1/rest/datastore/F-C0032-001"
 

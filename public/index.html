@@ -33,6 +33,14 @@
         </div>
 
         <div class="header-actions">
+            <div class="mode-switch-group">
+                <button id="btn-mode-obs" class="mode-btn active" title="模式 A：全台 800+ 測站即時物理量與彩色熱度圖">
+                    <span class="mode-icon">🔥</span> 即時觀測熱度圖
+                </button>
+                <button id="btn-mode-forecast" class="mode-btn" title="模式 B：全台 22 縣市三十六小時預報">
+                    <span class="mode-icon">🌤️</span> 36h 縣市預報
+                </button>
+            </div>
             <button id="btn-sync-cwa" class="btn btn-primary" title="使用 requests 連線 CWA API 撈取最新即時資料">
                 <span class="sync-icon">⚡</span> <span class="sync-text">連線 CWA API 即時同步</span>
             </button>
@@ -123,6 +131,7 @@
 
     <!-- Scripts -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
     <script src="/static/js/map.js"></script>
 </body>
 

@@ -52,4 +52,5 @@ logs/
 # Dynamic CWA raw responses (keep original fallback)
 data/raw/F-C0032-001_*.json
 !data/raw/F-C0032-001_20260923_110644.json
+data/raw/O-A0001-001_*.json
 

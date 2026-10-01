@@ -19,16 +19,30 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         query = urllib.parse.parse_qs(parsed.query)
+        path_lower = parsed.path.lower()
+        action = query.get("action", [""])[0].lower()
 
         is_refresh = (
-            "refresh" in parsed.path.lower()
-            or query.get("action", [""])[0].lower() == "refresh"
+            "refresh" in path_lower
+            or action in ["refresh", "refresh_observations"]
             or query.get("refresh", [""])[0].lower() in ["1", "true", "yes"]
         )
+        is_obs = "observation" in path_lower or action in ["observation", "observations", "obs"]
 
         try:
             with app.app_context():
-                if is_refresh:
+                if is_obs:
+                    from app import fetch_observation_data, fetch_live_observations
+                    if is_refresh:
+                        success, msg = fetch_live_observations()
+                        resp = fetch_observation_data()
+                        result = resp.get_json() if hasattr(resp, "get_json") else resp[0].get_json()
+                        result["sync_success"] = success
+                        result["sync_message"] = msg
+                    else:
+                        resp = fetch_observation_data()
+                        result = resp.get_json() if hasattr(resp, "get_json") else resp[0].get_json()
+                elif is_refresh:
                     success, msg = fetch_live_cwa_data()
                     resp = fetch_weather_data()
                     result = resp.get_json() if hasattr(resp, "get_json") else resp[0].get_json()

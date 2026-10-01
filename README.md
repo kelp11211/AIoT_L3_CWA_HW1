@@ -13,7 +13,7 @@
 | 2 | Database | CWA → ETL → SQLite | ✅ PASS |
 | 3 | Taiwan GIS Web | Database → Taiwan Map | ✅ PASS (3A~3G) |
 | 4 | GitHub | Local → GitHub | ✅ PASS |
-| 5 | Vercel | GitHub → Vercel | 🔄 IN PROGRESS |
+| 5 | Vercel | GitHub → Vercel | ✅ PASS |
 
 ## 核心流程
 
@@ -99,9 +99,13 @@ GitHub Repository 連接 Vercel，設定必要 Environment Variables，由 GitHu
 Code Change → Commit → Push → GitHub → Vercel → Auto Build → Auto Deploy
 ```
 
+- **正式上線網址 (Production URL)**：[https://a-io-t-l3-cwa-hw-1-py6zzivu5-kelp11211.vercel.app/](https://a-io-t-l3-cwa-hw-1-py6zzivu5-kelp11211.vercel.app/)
+- **專案入口網址 (Project URL)**：[https://a-io-t-l3-cwa-hw-1-pi.vercel.app/](https://a-io-t-l3-cwa-hw-1-pi.vercel.app/)
+
 注意：Local SQLite 適合 Gate 2–3 教學，但不可假設 Vercel local filesystem 是永久性 Production Database。若線上版需要持續寫入資料，Cloud Database 視為進階部署需求。
 
 完成條件：`GATE 5 = PASS`
+專案總結：`OVERALL PROJECT = COMPLETE`
 
 ## Security
 

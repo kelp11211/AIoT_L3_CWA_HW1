@@ -539,14 +539,14 @@ Cloud Database = Advanced Deployment Requirement
 ## Gate 5 Verification
 
 ```text
-[ ] Gate 4 已 PASS
-[ ] GitHub Repository 已連接 Vercel
-[ ] 必要 Environment Variables 已設定
-[ ] CWA API Key 未寫入 Repository
-[ ] GitHub Push 可觸發 Vercel Build
-[ ] Vercel Build 成功
-[ ] Vercel Deploy 成功
-[ ] Public Website 可正常開啟
+[x] Gate 4 已 PASS
+[x] GitHub Repository 已連接 Vercel
+[x] 必要 Environment Variables 已設定
+[x] CWA API Key 未寫入 Repository
+[x] GitHub Push 可觸發 Vercel Build
+[x] Vercel Build 成功
+[x] Vercel Deploy 成功
+[x] Public Website 可正常開啟 (https://a-io-t-l3-cwa-hw-1-py6zzivu5-kelp11211.vercel.app/)
 ```
 
 全部通過後：
@@ -717,11 +717,13 @@ Evidence:
 - Code committed and safely pushed to origin/main on GitHub
 
 Gate 5 — Vercel
-Status: TODO / IN PROGRESS / PASS / FAIL
+Status: PASS
 Evidence:
-- 
+- GATE5_STATUS.md verified and PASS
+- Vercel Auto Deployment connected to GitHub main branch
+- Public Website live at: https://a-io-t-l3-cwa-hw-1-py6zzivu5-kelp11211.vercel.app/
 
-Overall Status: IN PROGRESS / COMPLETE
+Overall Status: COMPLETE
 ```
 
 ---

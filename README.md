@@ -12,8 +12,8 @@
 | 1 | CWA API | 取得真實 CWA JSON | ✅ PASS |
 | 2 | Database | CWA → ETL → SQLite | ✅ PASS |
 | 3 | Taiwan GIS Web | Database → Taiwan Map | ✅ PASS (3A~3G) |
-| 4 | GitHub | Local → GitHub | 🔄 IN PROGRESS |
-| 5 | Vercel | GitHub → Vercel | ⏳ PENDING |
+| 4 | GitHub | Local → GitHub | ✅ PASS |
+| 5 | Vercel | GitHub → Vercel | 🔄 IN PROGRESS |
 
 ## 核心流程
 

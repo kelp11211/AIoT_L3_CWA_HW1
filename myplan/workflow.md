@@ -442,18 +442,18 @@ Repository 必須能重新 clone，並依文件重新執行專案。
 ## Gate 4 Verification
 
 ```text
-[ ] Gate 3 已 PASS
-[ ] .env 未被 commit
-[ ] Repository 不含 CWA API Key
-[ ] Repository 不含 password
-[ ] Repository 不含 token
-[ ] Repository 不含其他 secret
-[ ] .gitignore 已設定必要項目
-[ ] README 完整
-[ ] 設計文件完整
-[ ] 專案可重新 clone
-[ ] 可依文件重新執行
-[ ] 已安全 Push 至 GitHub
+[x] Gate 3 已 PASS
+[x] .env 未被 commit
+[x] Repository 不含 CWA API Key
+[x] Repository 不含 password
+[x] Repository 不含 token
+[x] Repository 不含其他 secret
+[x] .gitignore 已設定必要項目
+[x] README 完整
+[x] 設計文件完整
+[x] 專案可重新 clone
+[x] 可依文件重新執行
+[x] 已安全 Push 至 GitHub
 ```
 
 全部通過後：
@@ -709,9 +709,12 @@ Evidence:
 - Interactive dashboard supports live search, sorting, KPI metrics, and bi-directional map sync
 
 Gate 4 — GitHub
-Status: TODO / IN PROGRESS / PASS / FAIL
+Status: PASS
 Evidence:
-- 
+- GATE4_STATUS.md verified and PASS
+- No secrets, credentials, or .env files in Git tracking
+- .gitignore covers .env, *.db, __pycache__, .venv
+- Code committed and safely pushed to origin/main on GitHub
 
 Gate 5 — Vercel
 Status: TODO / IN PROGRESS / PASS / FAIL

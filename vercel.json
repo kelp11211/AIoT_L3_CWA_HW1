@@ -1,3 +1,16 @@
 {
-  "cleanUrls": true
+  "rewrites": [
+    {
+      "source": "/api/weather",
+      "destination": "/api/index.py?action=weather"
+    },
+    {
+      "source": "/api/refresh",
+      "destination": "/api/index.py?action=refresh"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
+    }
+  ]
 }
